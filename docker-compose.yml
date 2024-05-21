@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   booteth:
-    image: besu
+    image: akaronte/besu
     container_name: booteth
     command: besu --data-path=/booteth/data --genesis-file=/booteth/genesis.json --rpc-http-enabled --rpc-http-api=ADMIN,WEB3,ETH,NET,CLIQUE --rpc-http-host=0.0.0.0 --rpc-http-cors-origins='all' --graphql-http-enabled --host-allowlist='*'
     volumes:
@@ -15,7 +15,7 @@ services:
       besu_network:
         ipv4_address: 172.28.5.1
   nodeth1:
-    image: besu
+    image: akaronte/besu
     container_name: nodeth1
     command: besu --data-path=/nodeth1/data --genesis-file=/nodeth1/genesis.json --rpc-http-enabled --graphql-http-enabled --bootnodes=enode://2d926fdb1b39410303c8fca548b5b3191f70f86b95a15faeb08db86338180b0e182935e8ad9a243110e2192dd7f1cc1360880e112485193b5689593bd8d37895@172.28.5.1:30303
     volumes:
@@ -25,7 +25,7 @@ services:
       besu_network:
         ipv4_address: 172.28.5.2
   nodeth2:
-    image: besu
+    image: akaronte/besu
     depends_on:
       - booteth
     container_name: nodeth2
@@ -37,7 +37,7 @@ services:
       besu_network:
         ipv4_address: 172.28.5.3
   nodeth3:
-    image: besu
+    image: akaronte/besu
     depends_on:
       - booteth
     container_name: nodeth3
