@@ -1,3 +1,4 @@
+POA Network with besu client
 
 docker-compose up 
 
@@ -10,6 +11,5 @@ check blocks and transacciojn with chainlens dashboard:
 set ip  API JSON-RPC
 
 https://github.com/web3labs/chainlens-free.git 
-
 
 
