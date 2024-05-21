@@ -3,21 +3,24 @@
 /booteth/data/*
 !/booteth/data/booteth
 !/booteth/data/key
+/booteth/genesis.json
 
 !/nodeth1/data/
 /nodeth1/data/*
 !/nodeth1/data/nodeth1
 !/nodeth1/data/key
+/nodeth1/genesis.json
 
 !/nodeth2/data/
 /nodeth2/data/*
 !/nodeth2/data/nodeth2
 !/nodeth2/data/key
+/nodeth2/genesis.json
 
 !/nodeth3/data/
 /nodeth3/data/*
 !/nodeth3/data/nodeth3
 !/nodeth3/data/key
-
+/nodeth3/genesis.json
 
 node_modules/
