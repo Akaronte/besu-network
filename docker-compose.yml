@@ -6,7 +6,7 @@ services:
     command: besu --data-path=/booteth/data --genesis-file=/booteth/genesis.json --rpc-http-enabled --rpc-http-api=ADMIN,WEB3,ETH,NET,CLIQUE --rpc-http-host=0.0.0.0 --rpc-http-cors-origins='all' --graphql-http-enabled --host-allowlist='*'
     volumes:
       - ./booteth:/booteth/
-      - ./genesis.json:/booteth/genesis.json
+      #- ./genesis.json:/booteth/genesis.json
     ports:
       - 30303:30303
       - 8545:8545
@@ -20,7 +20,7 @@ services:
     command: besu --data-path=/nodeth1/data --genesis-file=/nodeth1/genesis.json --rpc-http-enabled --graphql-http-enabled --bootnodes=enode://2d926fdb1b39410303c8fca548b5b3191f70f86b95a15faeb08db86338180b0e182935e8ad9a243110e2192dd7f1cc1360880e112485193b5689593bd8d37895@172.28.5.1:30303
     volumes:
       - ./nodeth1:/nodeth1/
-      - ./genesis.json:/nodeth1/genesis.json
+      #- ./genesis.json:/nodeth1/genesis.json
     networks:
       besu_network:
         ipv4_address: 172.28.5.2
@@ -32,7 +32,7 @@ services:
     command: besu --data-path=data --genesis-file=/nodeth2/genesis.json --rpc-http-enabled --graphql-http-enabled --bootnodes=enode://2d926fdb1b39410303c8fca548b5b3191f70f86b95a15faeb08db86338180b0e182935e8ad9a243110e2192dd7f1cc1360880e112485193b5689593bd8d37895@172.28.5.1:30303
     volumes:
       - ./nodeth2:/nodeth2/
-      - ./genesis.json:/nodeth2/genesis.json
+      #- ./genesis.json:/nodeth2/genesis.json
     networks:
       besu_network:
         ipv4_address: 172.28.5.3
@@ -44,10 +44,23 @@ services:
     command: besu --data-path=data --genesis-file=/nodeth3/genesis.json --rpc-http-enabled --graphql-http-enabled --bootnodes=enode://2d926fdb1b39410303c8fca548b5b3191f70f86b95a15faeb08db86338180b0e182935e8ad9a243110e2192dd7f1cc1360880e112485193b5689593bd8d37895@172.28.5.1:30303
     volumes:
       - ./nodeth3:/nodeth3/
-      - ./genesis.json:/nodeth3/genesis.json
+      #- ./genesis.json:/nodeth3/genesis.json
     networks:
       besu_network:
         ipv4_address: 172.28.5.4
+  web3signer:
+    image: consensys/web3signer:develop
+    container_name: web3signer
+    command: --config-file=/config.yaml eth2
+    volumes:
+      - ./keysFiles:/keysFiles/
+      - ./web3SignerConfig.yaml:/config.yaml
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      besu_network:
+        ipv4_address: 172.28.5.5
 networks:
   besu_network:
     driver: bridge
