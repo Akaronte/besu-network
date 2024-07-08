@@ -11,6 +11,12 @@ services:
       - 30303:30303
       - 8545:8545
       - 8547:8547
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8545"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       besu_network:
         ipv4_address: 172.28.5.1
@@ -51,7 +57,7 @@ services:
   web3signer:
     image: consensys/web3signer:develop
     container_name: web3signer
-    command: --config-file=/config.yaml eth2
+    command: --config-file=/config.yaml eth1
     volumes:
       - ./keysFiles:/keysFiles/
       - ./web3SignerConfig.yaml:/config.yaml
@@ -61,6 +67,22 @@ services:
     networks:
       besu_network:
         ipv4_address: 172.28.5.5
+  teku:
+    container_name: teku
+    environment:
+      - "JAVA_OPTS=-Xmx4g"
+    image: consensys/teku:latest
+    command: --network=holesky --ee-endpoint=http://172.28.5.1:8545 --validators-external-signer-public-keys=53e3d8e5818eb82b3d71058d92641697d91d49ed --validators-external-signer-url=http://172.28.5.5:9000 --validators-keystore-locking-enabled=false --validators-proposer-default-fee-recipient=0x53e3d8e5818eb82b3d71058d92641697d91d49ed
+    depends_on:
+      - web3signer
+    volumes:
+      - ./teku:/var/lib/teku/data
+    ports:
+      - "5051:5051"
+      - "5052:5052"
+    networks:
+      besu_network:
+        ipv4_address: 172.28.5.6 
 networks:
   besu_network:
     driver: bridge
