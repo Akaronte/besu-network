@@ -32,3 +32,14 @@ teku --network=holesky \
 --validators-external-signer-public-keys=0xa99a...e44c,0xb89b...4a0b \
 --validators-external-signer-url=http://localhost:9000
 
+teku --network=2018 \
+--eth1-endpoint=http://localhost:8545 \
+--validators-external-signer-public-keys=0xa99a...e44c,0xb89b...4a0b \
+--validators-external-signer-url=http://localhost:9000
+
+curl -X GET http://localhost:9000/upcheck
+
+curl -X POST http://localhost:9000/reload
+
+curl -X GET http://localhost:9000/eth/v1/keystores
+
