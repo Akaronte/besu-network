@@ -2,6 +2,19 @@ version: "3.8"
 services:
   validator1:
     image: hyperledger/besu:23.4.1
+    restart: "on-failure"
+    env_file:
+      - ./config/besu/.env
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cp "/config/genesis.json" /config/genesis.json
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
     ports:
       - 21001:8545/tcp
       - 30303
@@ -17,106 +30,171 @@ services:
     networks:
       quorum-dev-quickstart:
         ipv4_address: 172.168.16.11
-  # validator2:
-  #   image: hyperledger/besu:23.4.1
-  #   ports:
-  #     - 21002:8545/tcp
-  #     - 30303
-  #     - 9545
-  #   environment:
-  #     - OTEL_RESOURCE_ATTRIBUTES=service.name=validator2,service.version=23.4.1
-  #   labels:
-  #     - "consensus=besu"
-  #   volumes:
-  #     - ./config/besu/:/config
-  #     #- ./config/nodes/validator2:/opt/besu/keys
-  #     - ./logs/besu:/tmp/besu
-  #   depends_on:
-  #     - validator1
-  #   networks:
-  #     quorum-dev-quickstart:
-  #       ipv4_address: 172.168.16.12
-  # validator3:
-  #   image: hyperledger/besu:23.4.1
-  #   ports:
-  #     - 21003:8545/tcp
-  #     - 30303
-  #     - 9545
-  #   environment:
-  #     - OTEL_RESOURCE_ATTRIBUTES=service.name=validator3,service.version=23.4.1
-  #   labels:
-  #     - "consensus=besu"
-  #   volumes:
-  #     - ./config/besu/:/config
-  #     #- ./config/nodes/validator3:/opt/besu/keys
-  #     - ./logs/besu:/tmp/besu
-  #   depends_on:
-  #     - validator1
-  #   networks:
-  #     quorum-dev-quickstart:
-  #       ipv4_address: 172.168.16.13 
-  # validator4:
-  #   image: hyperledger/besu:23.4.1
-  #   ports:
-  #     - 21004:8545/tcp
-  #     - 30303
-  #     - 9545
-  #   environment:
-  #     - OTEL_RESOURCE_ATTRIBUTES=service.name=validator4,service.version=23.4.1
-  #   labels:
-  #     - "consensus=besu"
-  #   volumes:
-  #     - ./config/besu/:/config
-  #     #- ./config/nodes/validator4:/opt/besu/keys
-  #     - ./logs/besu:/tmp/besu
-  #   depends_on:
-  #     - validator1
-  #   networks:
-  #     quorum-dev-quickstart:
-  #       ipv4_address: 172.168.16.14
-  # rpcnode:
-  #   image: hyperledger/besu:23.4.1
-  #   container_name: rpcnode
-  #   environment:
-  #     - OTEL_RESOURCE_ATTRIBUTES=service.name=rpcnode,service.version=23.4.1
-  #   volumes:
-  #     - ./config/besu/:/config
-  #     #- ./config/nodes/rpcnode:/opt/besu/keys
-  #     - ./logs/besu:/tmp/besu
-  #   # depends_on:
-  #   #   - validator1
-  #   ports:
-  #     - 8545:8545/tcp
-  #     - 8546:8546/tcp
-  #   networks:
-  #     quorum-dev-quickstart:
-  #       ipv4_address: 172.168.16.15
+  validator2:
+    image: hyperledger/besu:23.4.1
+    restart: "on-failure"
+    env_file:
+      - ./config/besu/.env
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cp "/config/genesis.json" /config/genesis.json
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;    
+    ports:
+      - 21002:8545/tcp
+      - 30303
+      - 9545
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator2,service.version=23.4.1
+    labels:
+      - "consensus=besu"
+    volumes:
+      - ./config/besu/:/config
+      #- ./config/nodes/validator2:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.12
+  validator3:
+    image: hyperledger/besu:23.4.1
+    restart: "on-failure"
+    env_file:
+      - ./config/besu/.env
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cp "/config/genesis.json" /config/genesis.json
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;   
+    ports:
+      - 21003:8545/tcp
+      - 30303
+      - 9545
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator3,service.version=23.4.1
+    labels:
+      - "consensus=besu"
+    volumes:
+      - ./config/besu/:/config
+      #- ./config/nodes/validator3:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.13 
+  validator4:
+    image: hyperledger/besu:23.4.1
+    restart: "on-failure"
+    env_file:
+      - ./config/besu/.env
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cp "/config/genesis.json" /config/genesis.json
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT;   
+    ports:
+      - 21004:8545/tcp
+      - 30303
+      - 9545
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator4,service.version=23.4.1
+    labels:
+      - "consensus=besu"
+    volumes:
+      - ./config/besu/:/config
+      #- ./config/nodes/validator4:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.14
+  rpcnode:
+    image: hyperledger/besu:23.4.1
+    restart: "on-failure"
+    env_file:
+      - ./config/besu/.env
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cp "/config/genesis.json" /config/genesis.json
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;   
+    container_name: rpcnode
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=rpcnode,service.version=23.4.1
+    volumes:
+      - ./config/besu/:/config
+      #- ./config/nodes/rpcnode:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+    ports:
+      - 8545:8545/tcp
+      - 8546:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.15
 
-  # member1besu:
-  #   image: hyperledger/besu:23.4.1
-  #   environment:
-  #     - OTEL_RESOURCE_ATTRIBUTES=service.name=member1besu,service.version=23.4.1
-  #     - NODE_ID=6
-  #   entrypoint:
-  #     - /bin/bash
-  #     - -c
-  #     - |
-  #       /opt/besu/bin/besu \
-  #       --config-file=/config/config.toml \
-  #       --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
-  #       --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
-  #   volumes:
-  #     - ./config/besu/:/config
-  #     #- ./config/nodes/member1:/opt/besu/keys
-  #     - ./logs/besu:/tmp/besu
-  #   # depends_on:
-  #   #   - validator1
-  #   ports:
-  #     - 20000:8545/tcp
-  #     - 20001:8546/tcp
-  #   networks:
-  #     quorum-dev-quickstart:
-  #       ipv4_address: 172.168.16.16
+  member1besu:
+    image: hyperledger/besu:23.4.1
+    restart: "on-failure"
+    env_file:
+      - ./config/besu/.env
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cp "/config/genesis.json" /config/genesis.json
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;   
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member1besu,service.version=23.4.1
+      - NODE_ID=6
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
+    volumes:
+      - ./config/besu/:/config
+      #- ./config/nodes/member1:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+    ports:
+      - 20000:8545/tcp
+      - 20001:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.16
 
 networks:
   quorum-dev-quickstart:

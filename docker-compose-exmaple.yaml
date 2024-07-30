@@ -1,3 +1,52 @@
+---
+version: '3.6'
+
+x-besu-def:
+  &besu-def
+  restart: "on-failure"
+  image: hyperledger/besu:${BESU_VERSION:-latest}
+  env_file:
+    - ./config/besu/.env
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+      cp "/config/genesis.json" /config/genesis.json
+      /opt/besu/bin/besu \
+      --config-file=/config/config.toml \
+      --p2p-host=$$(hostname -i) \
+      --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+      --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
+
+
+x-tessera-def:
+  &tessera-def
+  build:
+    context: config/tessera
+    args:
+      TESSERA_VERSION: ${TESSERA_VERSION:-latest}
+  environment:
+    TESSERA_MODE: orion
+  expose:
+    - 9000
+    - 9080
+    - 9101
+  restart: "no"
+  healthcheck:
+    test: ["CMD", "wget", "--spider", "--proxy", "off", "http://localhost:9000/upcheck"]
+    interval: 3s
+    timeout: 3s
+    retries: 20
+    start_period: 5s
+
+
+
+
+
+
+
+
+
 x-ethsignerProxy-def:
   &ethsignerProxy-def
   image: consensys/ethsigner:${ETHSIGNER_VERSION:-latest}
