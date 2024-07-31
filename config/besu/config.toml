@@ -1,5 +1,5 @@
 genesis-file="/config/genesis.json"
-#node-private-key-file="/opt/besu/keys/nodekey"
+node-private-key-file="/opt/besu/keys/nodekey"
 logging="INFO"
 data-path="/opt/besu/data"
 host-allowlist=["*"]
