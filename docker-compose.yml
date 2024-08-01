@@ -218,6 +218,35 @@ services:
       quorum-dev-quickstart:
         ipv4_address: 172.168.16.16
 
+  member2tessera:
+    build:
+      context: config/tessera
+      args:
+        TESSERA_VERSION: ${TESSERA_VERSION:-latest}
+    environment:
+      TESSERA_MODE: orion
+    expose:
+      - 9000
+      - 9080
+      - 9101
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--proxy", "off", "http://localhost:9000/upcheck"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+    ports:
+      - 9082:9080
+    volumes:
+      - ./config/nodes/member2:/config/keys
+      - ./logs/tessera:/var/log/tessera/
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.27
+
+
+
 
 
   explorer:
