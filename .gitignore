@@ -1,4 +1,5 @@
 **/data/
+!config/tessera/data/
 !/booteth/data/
 /booteth/data/*
 !/booteth/data/booteth

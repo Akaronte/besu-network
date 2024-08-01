@@ -1,0 +1,35 @@
+{
+  "algorithm": "qbft",
+  "nodes": [
+    {
+      "name": "rpcnode",
+      "client": "besu",
+      "rpcUrl": "http://rpcnode:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator1",
+      "client": "besu",
+      "rpcUrl": "http://validator1:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator2",
+      "client": "besu",
+      "rpcUrl": "http://validator2:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator3",
+      "client": "besu",
+      "rpcUrl": "http://validator3:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator4",
+      "client": "besu",
+      "rpcUrl": "http://validator4:8545",
+      "privateTxUrl": ""
+    }
+  ]
+}
