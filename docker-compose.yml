@@ -183,6 +183,42 @@ services:
       quorum-dev-quickstart:
         ipv4_address: 172.168.16.26
 
+  member1besu:
+    restart: "on-failure"
+    image: hyperledger/besu:23.4.1
+    env_file:
+      - ./config/besu/.env
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member1besu,service.version=23.4.1
+      - NODE_ID=6
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --privacy-enabled \
+        --privacy-url=http://member1tessera:9101 \
+        --privacy-public-key-file=/opt/besu/keys/tm.pub \
+        --privacy-onchain-groups-enabled=false \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
+    volumes:
+      - ./config/besu/:/config
+      - ./config/nodes/member1:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+      - member1tessera
+    ports:
+      - 20000:8545/tcp
+      - 20001:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.16.16
+
+
 
   explorer:
     image: consensys/quorum-explorer:latest
