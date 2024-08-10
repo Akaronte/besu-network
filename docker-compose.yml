@@ -29,7 +29,7 @@ services:
       - ./logs/besu:/tmp/besu
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.11
+        ipv4_address: 172.168.65.11
   validator2:
     image: hyperledger/besu:23.4.1
     restart: "on-failure"
@@ -61,7 +61,7 @@ services:
       - validator1
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.12
+        ipv4_address: 172.168.65.12
   validator3:
     image: hyperledger/besu:23.4.1
     restart: "on-failure"
@@ -93,7 +93,7 @@ services:
       - validator1
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.13 
+        ipv4_address: 172.168.65.13 
   validator4:
     image: hyperledger/besu:23.4.1
     restart: "on-failure"
@@ -124,7 +124,7 @@ services:
       - validator1
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.14
+        ipv4_address: 172.168.65.14
   rpcnode:
     image: hyperledger/besu:23.4.1
     restart: "on-failure"
@@ -153,7 +153,7 @@ services:
       - 8546:8546/tcp
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.15
+        ipv4_address: 172.168.65.15
 
 
   member1tessera:
@@ -181,7 +181,7 @@ services:
       - ./logs/tessera:/var/log/tessera/
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.26
+        ipv4_address: 172.168.65.26
 
   member1besu:
     restart: "on-failure"
@@ -216,13 +216,13 @@ services:
       - 20001:8546/tcp
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.16
+        ipv4_address: 172.168.65.16
 
   member2tessera:
     build:
       context: config/tessera
       args:
-        TESSERA_VERSION: ${TESSERA_VERSION:-latest}
+        TESSERA_VERSION: latest
     environment:
       TESSERA_MODE: orion
     expose:
@@ -243,11 +243,107 @@ services:
       - ./logs/tessera:/var/log/tessera/
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.27
+        ipv4_address: 172.168.65.27
+
+  member2besu:
+    restart: "on-failure"
+    image: hyperledger/besu:latest
+    env_file:
+      - ./config/besu/.env
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member2besu,service.version=${BESU_VERSION:-latest}
+      - NODE_ID=7
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --privacy-enabled \
+        --privacy-url=http://member2tessera:9101 \
+        --privacy-public-key-file=/opt/besu/keys/tm.pub \
+        --privacy-onchain-groups-enabled=false \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
+    volumes:
+      - ./config/besu/:/config
+      - ./config/nodes/member2:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+      - member2tessera
+    ports:
+      - 20002:8545/tcp
+      - 20003:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.65.17
+
+  member3tessera:
+    build:
+      context: config/tessera
+      args:
+        TESSERA_VERSION: latest
+    environment:
+      TESSERA_MODE: orion
+    expose:
+      - 9000
+      - 9080
+      - 9101
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--proxy", "off", "http://localhost:9000/upcheck"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+    ports:
+      - 9083:9080
+    volumes:
+      - ./config/nodes/member3:/config/keys
+      - ./logs/tessera:/var/log/tessera/
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.65.28
 
 
-
-
+  member3besu:
+    restart: "on-failure"
+    image: hyperledger/besu:23.4.1
+    env_file:
+      - ./config/besu/.env
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member3besu,service.version=23.4.1
+      - NODE_ID=8
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --privacy-enabled \
+        --privacy-url=http://member3tessera:9101 \
+        --privacy-public-key-file=/opt/besu/keys/tm.pub \
+        --privacy-onchain-groups-enabled=false \
+        --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;
+    volumes:
+      - ./config/besu/:/config
+      - ./config/nodes/member3:/opt/besu/keys
+      - ./logs/besu:/tmp/besu
+    depends_on:
+      - validator1
+      - member3tessera
+    ports:
+      - 20004:8545/tcp
+      - 20005:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.168.65.18
+        
+                
 
   explorer:
     image: consensys/quorum-explorer:latest
@@ -260,7 +356,7 @@ services:
       - 25000:25000/tcp
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.31
+        ipv4_address: 172.168.65.31
 
   prometheus:
     image: "prom/prometheus:v2.46.0"
@@ -273,7 +369,7 @@ services:
       - 9090:9090/tcp
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.32
+        ipv4_address: 172.168.65.32
 
   grafana:
     image: "grafana/grafana:10.1.0"
@@ -287,7 +383,7 @@ services:
       - 3000:3000/tcp
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.33
+        ipv4_address: 172.168.65.33
 
   loki:
     image: "grafana/loki:2.8.4"
@@ -298,7 +394,7 @@ services:
       - 3100:3100/tcp
     networks:
       quorum-dev-quickstart:
-        ipv4_address: 172.168.16.34
+        ipv4_address: 172.168.65.34
 
   # promtail:
   #   image: "grafana/promtail:2.8.4"
@@ -308,7 +404,7 @@ services:
   #   command: -config.file=/etc/promtail/config.yml
   #   networks:
   #     quorum-dev-quickstart:
-  #       ipv4_address: 172.168.16.35
+  #       ipv4_address: 172.168.65.35
 
 volumes:
   public-keys:
@@ -324,7 +420,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.168.16.0/24
+        - subnet: 172.168.65.0/24
 
 
 # version: "3.8"
