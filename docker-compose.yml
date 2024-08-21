@@ -160,7 +160,7 @@ services:
     build:
       context: config/tessera
       args:
-        TESSERA_VERSION: ${TESSERA_VERSION:-latest}
+        TESSERA_VERSION: latest
     environment:
       TESSERA_MODE: orion
     expose:
