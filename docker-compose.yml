@@ -74,7 +74,7 @@ services:
         cp "/config/genesis.json" /config/genesis.json
         /opt/besu/bin/besu \
         --config-file=/config/config.toml \
-        --p2p-host=$$(hostname -i) \
+        --p2p-host=validator3 \
         --rpc-http-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT \
         --rpc-ws-api=EEA,WEB3,ETH,NET,TRACE,DEBUG,ADMIN,TXPOOL,PRIV,PERM,QBFT ;   
     ports:
@@ -247,11 +247,11 @@ services:
 
   member2besu:
     restart: "on-failure"
-    image: hyperledger/besu:latest
+    image: hyperledger/besu:23.4.1
     env_file:
       - ./config/besu/.env
     environment:
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=member2besu,service.version=${BESU_VERSION:-latest}
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member2besu,service.version=23.4.1
       - NODE_ID=7
     entrypoint:
       - /bin/bash
