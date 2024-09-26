@@ -1,9 +1,12 @@
 #!/bin/sh
 
+
+cat ./data/tessera-config-template.json
+
 echo $TESSERA_MODE
 echo $TESSERA_HOSTNAME
 
-cat <<EOF | tee /data/tessera-config.json
+cat <<EOF | tee ./data/tessera-config-template.json
 {
   "mode": "${TESSERA_MODE}",
   "useWhiteList": false,
@@ -68,6 +71,13 @@ cat <<EOF | tee /data/tessera-config.json
 }
 EOF
 
-cat /data/tessera-config.json
+cat ./data/tessera-config-template.json
 
-exec /tessera/bin/tessera -configfile /data/tessera-config.json
+
+CONFIG=$(cat ./data/tessera-config-template.json | sed \
+  -e "s/\${TESSERA_MODE}/${TESSERA_MODE}/g" \
+  -e "s/\${TESSERA_HOSTNAME}/${TESSERA_HOSTNAME}/g")
+
+echo $CONFIG > ./tessera-config.json
+
+cat ./tessera-config.json

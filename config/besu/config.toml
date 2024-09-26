@@ -32,7 +32,7 @@ metrics-port=9545
 #permissions-nodes-config-file="/config/permissions_config.toml"
 
 # bootnodes
-bootnodes=["enode://2b5edad911f5aac81344515686426d4b9bff3ea91ae6ee5a424f87c2d11bdffbe139c6e54b9efa1d30fa1e4255b03c49899bf940ce224e63f93c58d7d92bd1d3@172.168.16.11:30303"]
+bootnodes=["enode://2b5edad911f5aac81344515686426d4b9bff3ea91ae6ee5a424f87c2d11bdffbe139c6e54b9efa1d30fa1e4255b03c49899bf940ce224e63f93c58d7d92bd1d3@172.168.65.11:30303"]
 
 
 # Discovery at boot is set to a list of static files, but will also discover new nodes should they be added

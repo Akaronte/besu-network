@@ -157,12 +157,15 @@ services:
 
 
   member1tessera:
-    build:
-      context: config/tessera
-      args:
-        TESSERA_VERSION: latest
+    image: tessera:latest
+    # build:
+    #   context: config/tessera
+    #   args:
+    #     TESSERA_VERSION: latest
+    #     TESSERA_HOSTNAME: member1tessera
     environment:
       TESSERA_MODE: orion
+      TESSERA_HOSTNAME: member1tessera
     expose:
       - 9000
       - 9080
@@ -219,12 +222,15 @@ services:
         ipv4_address: 172.168.65.16
 
   member2tessera:
-    build:
-      context: config/tessera
-      args:
-        TESSERA_VERSION: latest
+    image: tessera:latest
+    # build:
+    #   context: config/tessera
+    #   args:
+    #     TESSERA_VERSION: latest
+    #     TESSERA_HOSTNAME: member2tessera
     environment:
       TESSERA_MODE: orion
+      TESSERA_HOSTNAME: member2tessera
     expose:
       - 9000
       - 9080
@@ -247,11 +253,11 @@ services:
 
   member2besu:
     restart: "on-failure"
-    image: hyperledger/besu:latest
+    image: hyperledger/besu:23.4.1
     env_file:
       - ./config/besu/.env
     environment:
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=member2besu,service.version=${BESU_VERSION:-latest}
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member2besu,service.version=23.4.1
       - NODE_ID=7
     entrypoint:
       - /bin/bash
@@ -281,12 +287,15 @@ services:
         ipv4_address: 172.168.65.17
 
   member3tessera:
-    build:
-      context: config/tessera
-      args:
-        TESSERA_VERSION: latest
+    image: tessera:latest
+    # build:
+    #   context: config/tessera
+    #   args:
+    #     TESSERA_VERSION: latest
+    #     TESSERA_HOSTNAME: member3tessera
     environment:
       TESSERA_MODE: orion
+      TESSERA_HOSTNAME: member3tessera
     expose:
       - 9000
       - 9080

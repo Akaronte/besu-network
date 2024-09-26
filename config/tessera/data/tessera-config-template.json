@@ -1,5 +1,5 @@
 {
-  "mode": "${TESSERA_MODE}",
+  "mode": "orion",
   "useWhiteList": false,
   "jdbc": {
       "username": "sa",
@@ -11,13 +11,13 @@
       {
           "app": "ThirdParty",
           "enabled": true,
-          "serverAddress": "http://${HOSTNAME}:9080",
+          "serverAddress": "http://TESSERA_HOSTNAME:9080",
           "communicationType": "REST"
       },
       {
           "app": "Q2T",
           "enabled": true,
-          "serverAddress": "http://${HOSTNAME}:9101",
+          "serverAddress": "http://TESSERA_HOSTNAME:9101",
           "sslConfig": {
               "tls": "OFF"
           },
@@ -26,7 +26,7 @@
       {
           "app": "P2P",
           "enabled": true,
-          "serverAddress": "http://${HOSTNAME}:9000",
+          "serverAddress": "http://TESSERA_HOSTNAME:9000",
           "sslConfig": {
               "tls": "OFF"
           },
