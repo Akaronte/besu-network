@@ -1,7 +1,26 @@
+FROM alpine:latest AS builder
+ARG TESSERA_MODE
+ARG TESSERA_HOSTNAME
+
+COPY data /data
+COPY generate.sh generate.sh
+
+RUN chmod 777 -R data
+
+RUN chmod +x generate.sh
+ENV TESSERA_MODE=${TESSERA_MODE}
+ENV TESSERA_HOSTNAME=${TESSERA_HOSTNAME}
+
+RUN /generate.sh
+
+
+
+# FROM alpine:latest
+
+
+# COPY --from=builder /data/tessera-config.json /data/tessera-config.json
 FROM quorumengineering/tessera:latest
-
-#FROM alpine:latest
-
+# FROM alpine:latest
 
 USER root
 
@@ -12,8 +31,13 @@ RUN if [ -e /sbin/apk ] ; then apk add gettext --no-cache ; else apt-get update 
 
 ENV JAVA_OPTS="-Dlogback.configurationFile=/data/logback.xml"
 
+RUN mkdir /data
+
+RUN chmod 777 -R data
+
 COPY docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
-COPY data data
+COPY /data/logback.xml /data/logback.xml
+COPY --from=builder /data/tessera-config.json /data/tessera-config.json
 
 RUN chmod 777 -R data
 

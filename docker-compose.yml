@@ -157,12 +157,13 @@ services:
 
 
   member1tessera:
-    image: tessera:latest
-    # build:
-    #   context: config/tessera
-    #   args:
-    #     TESSERA_VERSION: latest
-    #     TESSERA_HOSTNAME: member1tessera
+    #image: tessera:latest
+    build:
+      context: config/tessera
+      args:
+        TESSERA_VERSION: latest
+        TESSERA_MODE: orion
+        TESSERA_HOSTNAME: member1tessera
     environment:
       TESSERA_MODE: orion
       TESSERA_HOSTNAME: member1tessera
@@ -222,12 +223,13 @@ services:
         ipv4_address: 172.168.16.16
 
   member2tessera:
-    image: tessera:latest
-    # build:
-    #   context: config/tessera
-    #   args:
-    #     TESSERA_VERSION: latest
-    #     TESSERA_HOSTNAME: member2tessera
+    #image: tessera:latest
+    build:
+      context: config/tessera
+      args:
+        TESSERA_VERSION: latest
+        TESSERA_MODE: orion
+        TESSERA_HOSTNAME: member2tessera
     environment:
       TESSERA_MODE: orion
       TESSERA_HOSTNAME: member2tessera
@@ -287,12 +289,13 @@ services:
         ipv4_address: 172.168.16.17
 
   member3tessera:
-    image: tessera:latest
-    # build:
-    #   context: config/tessera
-    #   args:
-    #     TESSERA_VERSION: latest
-    #     TESSERA_HOSTNAME: member3tessera
+    #image: tessera:latest
+    build:
+      context: config/tessera
+      args:
+        TESSERA_VERSION: latest
+        TESSERA_MODE: orion
+        TESSERA_HOSTNAME: member3tessera
     environment:
       TESSERA_MODE: orion
       TESSERA_HOSTNAME: member3tessera
