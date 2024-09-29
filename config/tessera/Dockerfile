@@ -13,14 +13,7 @@ ENV TESSERA_HOSTNAME=${TESSERA_HOSTNAME}
 
 RUN /generate.sh
 
-
-
-# FROM alpine:latest
-
-
-# COPY --from=builder /data/tessera-config.json /data/tessera-config.json
 FROM quorumengineering/tessera:latest
-# FROM alpine:latest
 
 USER root
 
